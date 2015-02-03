@@ -22,11 +22,12 @@ java -jar infinispan.war
 The command-line launcher accepts a few options:
 
 ```bash
-  --host=IP
-  --config=infinispan-config-file.xml
-  --ajpPort=#
-  --httpPort=#
-  --hotrodPort=#
+java -jar infinispan.war \
+  --host=IP \
+  --config=infinispan-config-file.xml \
+  --ajpPort=# \
+  --httpPort=# \
+  --hotrodPort=# \
   --memcachedPort=#
 ```
 
