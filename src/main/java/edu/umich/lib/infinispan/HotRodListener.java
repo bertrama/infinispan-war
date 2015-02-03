@@ -8,20 +8,16 @@ import javax.servlet.ServletContextListener;
 
 import org.infinispan.manager.EmbeddedCacheManager;
 
-import org.infinispan.rest.logging.JavaLog;
-
 import org.infinispan.server.hotrod.HotRodServer;
 import org.infinispan.server.hotrod.configuration.HotRodServerConfiguration;
 import org.infinispan.server.hotrod.configuration.HotRodServerConfigurationBuilder;
 
-import org.infinispan.util.logging.LogFactory;
-
 public class HotRodListener extends Listener {
-
-   private final static JavaLog log = LogFactory.getLog(HotRodListener.class, JavaLog.class);
 
    private final static String CONFIGURATION = "edu.umich.lib.infinispan.HotRodListener.CONFIGURATION";
    private final static String SERVER        = "edu.umich.lib.infinispan.HotRodListener.SERVER";
+   private final static String HOTROD_HOST   = "infinispan.hotrod.host";
+   private final static String HOTROD_PORT   = "infinispan.hotrod.port";
 
    public static HotRodServerConfiguration getConfiguration(ServletContext ctx) {
       return (HotRodServerConfiguration) ctx.getAttribute(CONFIGURATION);
@@ -41,11 +37,11 @@ public class HotRodListener extends Listener {
 
    public HotRodServerConfiguration createConfiguration (ServletContext ctx) {
       HotRodServerConfigurationBuilder builder = new HotRodServerConfigurationBuilder();
-      String port = getParameter(ctx, "infinispan.config.hotrod.port");
+      String port = getParameter(ctx, HOTROD_PORT);
       if (port != null) {
         builder.port(Integer.parseInt(port));
       }
-      String host = getParameter(ctx, "infinispan.config.hotrod.host");
+      String host = getParameter(ctx, HOTROD_HOST);
       if (host != null) {
         builder.host(host);
       }
@@ -63,7 +59,6 @@ public class HotRodListener extends Listener {
    @Override
    public void contextInitialized(ServletContextEvent sce) {
       synchronized (sce) {
-         log.info("Starting HotRodListener");
          ServletContext ctx = sce.getServletContext();
 
          HotRodServer server = getServer(ctx);

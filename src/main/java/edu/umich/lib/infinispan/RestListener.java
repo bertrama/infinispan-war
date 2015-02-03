@@ -12,8 +12,6 @@ import org.infinispan.rest.ManagerInstance;
 import org.infinispan.rest.configuration.ExtendedHeaders;
 import org.infinispan.rest.configuration.RestServerConfiguration;
 import org.infinispan.rest.configuration.RestServerConfigurationBuilder;
-import org.infinispan.rest.logging.JavaLog;
-import org.infinispan.util.logging.LogFactory;
 
 /**
  * Initializes cache manager for the REST server and sets it into the servlet context.
@@ -27,8 +25,6 @@ public class RestListener extends Listener {
     * Whether to allow returning extended metadata headers
     */
    private static final String EXTENDED_HEADERS = "extended.headers";
-
-   private final static JavaLog log = LogFactory.getLog(RestListener.class, JavaLog.class);
 
    private final static String CONFIGURATION = "edu.umich.lib.infinispan.RestListener.CONFIGURATION"; 
 
@@ -55,7 +51,6 @@ public class RestListener extends Listener {
    @Override
    public void contextInitialized(ServletContextEvent sce) {
       synchronized (sce) {
-         log.info("Starting RestListener");
          ServletContext ctx = sce.getServletContext();
          // Try to obtain an externally injected CacheManager
          EmbeddedCacheManager cm = getCacheManager(ctx);

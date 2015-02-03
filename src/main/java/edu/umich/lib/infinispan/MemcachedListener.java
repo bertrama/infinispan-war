@@ -8,20 +8,16 @@ import javax.servlet.ServletContextListener;
 
 import org.infinispan.manager.EmbeddedCacheManager;
 
-import org.infinispan.rest.logging.JavaLog;
-
 import org.infinispan.server.memcached.MemcachedServer;
 import org.infinispan.server.memcached.configuration.MemcachedServerConfiguration;
 import org.infinispan.server.memcached.configuration.MemcachedServerConfigurationBuilder;
 
-import org.infinispan.util.logging.LogFactory;
-
 public class MemcachedListener extends Listener {
 
-   private final static JavaLog log = LogFactory.getLog(MemcachedListener.class, JavaLog.class);
-
-   private final static String CONFIGURATION = "edu.umich.lib.infinispan.MemcachedListener.CONFIGURATION";
-   private final static String SERVER        = "edu.umich.lib.infinispan.MemcachedListener.SERVER";
+   private final static String CONFIGURATION  = "edu.umich.lib.infinispan.MemcachedListener.CONFIGURATION";
+   private final static String SERVER         = "edu.umich.lib.infinispan.MemcachedListener.SERVER";
+   private final static String MEMCACHED_PORT = "infinispan.memcached.port";
+   private final static String MEMCACHED_HOST = "infinispan.memcached.host";
 
    public static MemcachedServerConfiguration getConfiguration(ServletContext ctx) {
       return (MemcachedServerConfiguration) ctx.getAttribute(CONFIGURATION);
@@ -41,11 +37,11 @@ public class MemcachedListener extends Listener {
 
    public MemcachedServerConfiguration createConfiguration (ServletContext ctx) {
       MemcachedServerConfigurationBuilder builder = new MemcachedServerConfigurationBuilder();
-      String port = getParameter(ctx, "infinispan.config.memcached.port");
+      String port = getParameter(ctx, MEMCACHED_PORT);
       if (port != null) {
         builder.port(Integer.parseInt(port));
       }
-      String host = getParameter(ctx, "infinispan.config.memcached.host");
+      String host = getParameter(ctx, MEMCACHED_HOST);
       if (host != null) {
         builder.host(host);
       }
@@ -64,7 +60,6 @@ public class MemcachedListener extends Listener {
    @Override
    public void contextInitialized(ServletContextEvent sce) {
       synchronized (sce) {
-         log.info("Starting MemcachedListener");
          ServletContext ctx = sce.getServletContext();
 
          MemcachedServer server = getServer(ctx);

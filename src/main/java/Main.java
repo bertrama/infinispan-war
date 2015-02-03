@@ -12,32 +12,32 @@ import org.mortbay.jetty.webapp.WebAppContext;
 
 public class Main
 {
+   private static String host           = "127.0.0.1";
+   private static String config         = "config.xml";
    private static Integer ajpPort       = 8009;
    private static Integer httpPort      = 8080;
    private static Integer hotrodPort    = 11222;
    private static Integer memcachedPort = 11211;
-   private static String host           = "127.0.0.1";
-   private static String config         = "config.xml";
 
    private static void parseArgs(String[] args) {
       // Pull in the system properties.
+      if (System.getProperty("infinispan.host") != null) {
+         host = System.getProperty("infinispan.host");
+      }
       if (System.getProperty("infinispan.config") != null) {
          config = System.getProperty("infinispan.config");
       }
-      if (System.getProperty("infinispan.config.host") != null) {
-         host = System.getProperty("infinispan.config.host");
+      if (System.getProperty("infinispan.ajp.port") != null) {
+         ajpPort = Integer.parseInt(System.getProperty("infinispan.ajp.port"));
       }
-      if (System.getProperty("infinispan.config.ajp.port") != null) {
-         ajpPort = Integer.parseInt(System.getProperty("infinispan.config.ajp.port"));
+      if (System.getProperty("infinispan.host") != null) {
+         httpPort = Integer.parseInt(System.getProperty("infinispan.http.port"));
       }
-      if (System.getProperty("infinispan.config.host") != null) {
-         httpPort = Integer.parseInt(System.getProperty("infinispan.config.http.port"));
+      if (System.getProperty("infinispan.hotrod.port") != null) {
+         hotrodPort = Integer.parseInt(System.getProperty("infinispan.hotrod.port"));
       }
-      if (System.getProperty("infinispan.config.hotrod.port") != null) {
-         hotrodPort = Integer.parseInt(System.getProperty("infinispan.config.hotrod.port"));
-      }
-      if (System.getProperty("infinispan.config.memcached.port") != null) {
-         memcachedPort = Integer.parseInt(System.getProperty("infinispan.config.memcached.port"));
+      if (System.getProperty("infinispan.memcached.port") != null) {
+         memcachedPort = Integer.parseInt(System.getProperty("infinispan.memcached.port"));
       }
 
       // Override with command line arguments.
@@ -61,7 +61,14 @@ public class Main
             config = args[i].substring(9, args[i].length());
          }
          else {
-            System.err.println("Run with java -jar infinispan.war [--hotrodPort=#] [--memcachedPort=#] [--ajpPort=#] [--httpPort=#] [--host=IP]");
+            System.err.println("Run with java -jar infinispan.war [options]");
+            System.err.println("Options:");
+            System.err.println("  --host=IP");
+            System.err.println("  --config=infinispan-config-file.xml");
+            System.err.println("  --ajpPort=#");
+            System.err.println("  --httpPort=#");
+            System.err.println("  --hotrodPort=#");
+            System.err.println("  --memcachedPort=#");
             System.err.println("");
             System.err.println("  Unrecognized argument: " + args[i]);
             System.exit(255);
@@ -69,12 +76,12 @@ public class Main
       }
 
       // Write back to system properties.
-      System.setProperty("infinispan.config",                config);
-      System.setProperty("infinispan.config.host",           host);
-      System.setProperty("infinispan.config.ajp.port",       ajpPort.toString());
-      System.setProperty("infinispan.config.http.port",      httpPort.toString());
-      System.setProperty("infinispan.config.hotrod.port",    hotrodPort.toString());
-      System.setProperty("infinispan.config.memcached.port", memcachedPort.toString());
+      System.setProperty("infinispan.host", host);
+      System.setProperty("infinispan.config", config);
+      System.setProperty("infinispan.ajp.port", ajpPort.toString());
+      System.setProperty("infinispan.http.port", httpPort.toString());
+      System.setProperty("infinispan.hotrod.port", hotrodPort.toString());
+      System.setProperty("infinispan.memcached.port", memcachedPort.toString());
    }
 
    public static void main(String[] args) throws Exception
