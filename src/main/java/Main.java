@@ -30,7 +30,7 @@ public class Main
       if (System.getProperty("infinispan.ajp.port") != null) {
          ajpPort = Integer.parseInt(System.getProperty("infinispan.ajp.port"));
       }
-      if (System.getProperty("infinispan.host") != null) {
+      if (System.getProperty("infinispan.http.port") != null) {
          httpPort = Integer.parseInt(System.getProperty("infinispan.http.port"));
       }
       if (System.getProperty("infinispan.hotrod.port") != null) {
