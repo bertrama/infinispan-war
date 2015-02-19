@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="urn:infinispan:config:7.1 http://www.infinispan.org/schemas/infinispan-config-7.1.xsd"
+      xmlns="urn:infinispan:config:7.1">
+   <jgroups>
+     <stack-file name="tcp" path="${infinispan.jgroups.tcp:configs/jgroups-tcp.xml}"/>
+   </jgroups>
+   <cache-container name="SampleCacheManager" statistics="true"  default-cache="the-default-cache" shutdown-hook="DEFAULT">
+     <transport stack="tcp"
+                cluster="${infinispan.transport.tcp.cluster:infinispan-cluster}"
+                node-name="${infinispan.transport.tcp.node:NODE-1}"
+                machine="${infinispan.transport.tcp.machine:MACHINE-1}"
+                rack="${infinispan.transport.tcp.rack:RACK-1}"
+                site="${infinispan.transport.tcp.site:SITE-1}" />
+     <jmx domain="org.infinispan" />
+     <replicated-cache name="the-default-cache" statistics="true" mode="SYNC" remote-timeout="20000">
+       <state-transfer enabled="true" timeout="240000" chunk-size="10000" />
+     </replicated-cache>
+   </cache-container>
+</infinispan>

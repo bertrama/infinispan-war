@@ -11,7 +11,7 @@ This is primarily intended to run at a relatively small scale for development an
 ## Running
 
 The .war file should run in a standard servlet container like jetty, tomcat or jboss.
-Can also be run on the command line using a packaged jetty container:
+Can also be run on the command line using an embedded jetty container:
 
 ```bash
 java -jar infinispan.war
