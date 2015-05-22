@@ -54,3 +54,5 @@ Or as context init parameters in `WEB-INF/web.xml`:
   ...
 </webapp>
 ```
+
+Finally, `WEB-INF/config.xml` will be loaded if no other configuration can be found.

@@ -34,6 +34,8 @@ public class Listener implements ServletContextListener {
    public final static String CACHE_MANAGER = "edu.umich.lib.infinispan.Listener.CACHE_MANAGER";
    public final static String MANAGER_INSTANCE = "edu.umich.lib.infinispan.Listener.MANAGER_INSTANCE";
 
+   private final static String DEFAULT_CONFIG = "/WEB-INF/config.xml";
+
    public static String getParameter(ServletContext ctx, String name) {
       String ret = System.getProperty(name);
       if (ret == null) {
@@ -55,17 +57,28 @@ public class Listener implements ServletContextListener {
       return (ManagerInstance) ctx.getAttribute(MANAGER_INSTANCE);
    }
 
+   private static EmbeddedCacheManager loadDefaultConfig(ServletContext ctx) {
+      EmbeddedCacheManager cm;
+      try {
+         cm = new DefaultCacheManager(ctx.getResourceAsStream(DEFAULT_CONFIG));
+      } catch (IOException e) {
+         log.errorReadingConfigurationFile(e, "war:" + DEFAULT_CONFIG);
+         cm = new DefaultCacheManager();
+      }
+      return cm;
+   }
+
    protected static EmbeddedCacheManager createCacheManager(ServletContext ctx) {
       EmbeddedCacheManager cm;
       String cfgFile = getParameter(ctx, INFINISPAN_CONFIG);
       if (cfgFile == null) {
-         cm = new DefaultCacheManager();
+         cm = loadDefaultConfig(ctx);
       } else {
          try {
             cm = new DefaultCacheManager(cfgFile);
          } catch (IOException e) {
             log.errorReadingConfigurationFile(e, cfgFile);
-            cm = new DefaultCacheManager();
+            cm = loadDefaultConfig(ctx);
          }
       }
       setCacheManager(ctx, cm);

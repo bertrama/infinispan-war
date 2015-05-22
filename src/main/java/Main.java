@@ -13,7 +13,7 @@ import org.mortbay.jetty.webapp.WebAppContext;
 public class Main
 {
    private static String host           = "127.0.0.1";
-   private static String config         = "config.xml";
+   private static String config         = null;
    private static Integer ajpPort       = 8009;
    private static Integer httpPort      = 8080;
    private static Integer hotrodPort    = 11222;
@@ -77,7 +77,9 @@ public class Main
 
       // Write back to system properties.
       System.setProperty("infinispan.host", host);
-      System.setProperty("infinispan.config", config);
+      if (config != null) {
+        System.setProperty("infinispan.config", config);
+      }
       System.setProperty("infinispan.ajp.port", ajpPort.toString());
       System.setProperty("infinispan.http.port", httpPort.toString());
       System.setProperty("infinispan.hotrod.port", hotrodPort.toString());
