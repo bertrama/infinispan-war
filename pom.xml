@@ -4,7 +4,7 @@
   <groupId>edu.umich.lib</groupId>
   <artifactId>infinispan</artifactId>
   <packaging>war</packaging>
-  <version>7.1.1.Final</version>
+  <version>6.0.0.Final</version>
   <name>infinispan Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
