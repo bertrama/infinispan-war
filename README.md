@@ -6,12 +6,12 @@ This is primarily intended to run at a relatively small scale for development an
 
 ## Building
 
-`mvn package` should build the war file.  I used version 3.2.5.
+`mvn package` should build the war file.  I used version 3.2.5 of maven.
 
 ## Running
 
-The .war file should run in a standard servlet container like jetty, tomcat or jboss.
-Can also be run on the command line using an embedded jetty container:
+The .war file should be able to run in a standard servlet container like jetty, tomcat or jboss.
+The .war file can also be run on the command line using an embedded jetty container:
 
 ```bash
 java -jar infinispan.war
