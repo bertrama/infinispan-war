@@ -8,7 +8,7 @@ import javax.servlet.ServletContextListener;
 
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
-import org.infinispan.rest.ManagerInstance;
+import org.infinispan.rest.RestCacheManager;
 import org.infinispan.rest.configuration.ExtendedHeaders;
 import org.infinispan.rest.configuration.RestServerConfiguration;
 import org.infinispan.rest.configuration.RestServerConfigurationBuilder;
@@ -46,15 +46,15 @@ public class Listener implements ServletContextListener {
 
    public static void setCacheManager(ServletContext ctx, EmbeddedCacheManager cacheManager) {
       ctx.setAttribute(CACHE_MANAGER, cacheManager);
-      ctx.setAttribute(MANAGER_INSTANCE, new ManagerInstance(cacheManager));
+      ctx.setAttribute(MANAGER_INSTANCE, new RestCacheManager(cacheManager));
    }
 
    public static EmbeddedCacheManager getCacheManager(ServletContext ctx) {
       return (EmbeddedCacheManager) ctx.getAttribute(CACHE_MANAGER);
    }
 
-   public static ManagerInstance getManagerInstance(ServletContext ctx) {
-      return (ManagerInstance) ctx.getAttribute(MANAGER_INSTANCE);
+   public static RestCacheManager getRestCacheManager(ServletContext ctx) {
+      return (RestCacheManager) ctx.getAttribute(MANAGER_INSTANCE);
    }
 
    private static EmbeddedCacheManager loadDefaultConfig(ServletContext ctx) {

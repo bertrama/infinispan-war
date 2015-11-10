@@ -4,7 +4,7 @@
   <groupId>edu.umich.lib</groupId>
   <artifactId>infinispan</artifactId>
   <packaging>war</packaging>
-  <version>7.1.1.Final</version>
+  <version>7.2.4.Final</version>
   <name>infinispan Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
@@ -47,7 +47,6 @@
 	<groupId>org.infinispan</groupId>
 	<artifactId>infinispan-server-rest</artifactId>
 	<version>${project.version}</version>
-   <!--     <scope>runtime</scope> -->
         <type>jar</type>
         <classifier>classes</classifier>
     </dependency>
@@ -62,14 +61,14 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-       <groupId>org.mortbay.jetty</groupId>
-       <artifactId>jetty-embedded</artifactId>
-       <version>6.1.25</version>
+       <groupId>org.eclipse.jetty</groupId>
+       <artifactId>jetty-servlet</artifactId>
+       <version>9.3.5.v20151012</version>
     </dependency>
     <dependency>
-       <groupId>org.mortbay.jetty</groupId>
-       <artifactId>jetty-ajp</artifactId>
-       <version>6.1.25</version>
+       <groupId>org.eclipse.jetty</groupId>
+       <artifactId>jetty-webapp</artifactId>
+       <version>9.3.5.v20151012</version>
     </dependency>
   </dependencies>
   <build>
@@ -111,7 +110,7 @@
                      <goal>unpack-dependencies</goal>
                   </goals>
                   <configuration>
-                     <includeGroupIds>org.mortbay.jetty,javax.servlet</includeGroupIds>
+                     <includeGroupIds>org.eclipse.jetty,javax.servlet</includeGroupIds>
                      <excludeArtifactIds>jsp-api,jstl</excludeArtifactIds>
                      <excludes>META-INF/ECLIPSEF.*</excludes>
                      <outputDirectory>

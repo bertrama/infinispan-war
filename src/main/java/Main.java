@@ -3,18 +3,15 @@ import java.util.Map;
 import java.util.HashMap;
 import java.security.ProtectionDomain;
 import java.net.URL;
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.ajp.Ajp13SocketConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public class Main
 {
    private static String host           = "127.0.0.1";
    private static String config         = null;
-   private static Integer ajpPort       = 8009;
    private static Integer httpPort      = 8080;
    private static Integer hotrodPort    = 11222;
    private static Integer memcachedPort = 11211;
@@ -26,9 +23,6 @@ public class Main
       }
       if (System.getProperty("infinispan.config") != null) {
          config = System.getProperty("infinispan.config");
-      }
-      if (System.getProperty("infinispan.ajp.port") != null) {
-         ajpPort = Integer.parseInt(System.getProperty("infinispan.ajp.port"));
       }
       if (System.getProperty("infinispan.http.port") != null) {
          httpPort = Integer.parseInt(System.getProperty("infinispan.http.port"));
@@ -44,9 +38,6 @@ public class Main
       for (int i = 0 ; i < args.length ; ++i) {
          if (args[i].startsWith("--httpPort=")) {
             httpPort = Integer.parseInt(args[i].substring(11, args[i].length()));
-         }
-         else if (args[i].startsWith("--ajpPort=")) {
-            ajpPort = Integer.parseInt(args[i].substring(10, args[i].length()));
          }
          else if (args[i].startsWith("--memcachedPort=")) {
             memcachedPort = Integer.parseInt(args[i].substring(16, args[i].length()));
@@ -65,7 +56,6 @@ public class Main
             System.err.println("Options:");
             System.err.println("  --host=IP");
             System.err.println("  --config=infinispan-config-file.xml");
-            System.err.println("  --ajpPort=#");
             System.err.println("  --httpPort=#");
             System.err.println("  --hotrodPort=#");
             System.err.println("  --memcachedPort=#");
@@ -80,7 +70,6 @@ public class Main
       if (config != null) {
         System.setProperty("infinispan.config", config);
       }
-      System.setProperty("infinispan.ajp.port", ajpPort.toString());
       System.setProperty("infinispan.http.port", httpPort.toString());
       System.setProperty("infinispan.hotrod.port", hotrodPort.toString());
       System.setProperty("infinispan.memcached.port", memcachedPort.toString());
@@ -92,21 +81,15 @@ public class Main
       Server server = new Server();
 
       if (httpPort > 0) {
-         SelectChannelConnector httpConnector = new SelectChannelConnector();
+         ServerConnector  httpConnector = new ServerConnector(server);
          httpConnector.setPort(httpPort);
          httpConnector.setHost(host);
          server.addConnector(httpConnector);
       }
 
-      if (ajpPort > 0) {
-         Ajp13SocketConnector ajpConnector = new Ajp13SocketConnector();
-         ajpConnector.setPort(ajpPort);
-         ajpConnector.setHost(host);
-         server.addConnector(ajpConnector);
-      }
-
       ProtectionDomain domain = Main.class.getProtectionDomain();
       URL location = domain.getCodeSource().getLocation();
+
       WebAppContext webapp = new WebAppContext();
       webapp.setContextPath("/");
       webapp.setWar(location.toExternalForm());
